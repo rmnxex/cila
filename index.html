@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Love Story for Cila</title>
   <style>
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
-      color: #fff;
-      background: linear-gradient(135deg, #000, #1a1a1a, #2b2b2b);
+      color: #f5f5f5;
+      background: linear-gradient(to bottom right, #000, #1a1a1a, #2b2b2b);
       overflow: hidden;
       text-align: center;
     }
+
     .slide {
       display: none;
       height: 100vh;
@@ -21,47 +22,112 @@
       align-items: center;
       flex-direction: column;
       padding: 20px;
+      transition: opacity 0.5s ease;
+      opacity: 0;
     }
+
     .active {
       display: flex;
+      opacity: 1;
     }
+
     button {
       background: rgba(255, 255, 255, 0.1);
       color: white;
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       padding: 12px 24px;
       border-radius: 50px;
       cursor: pointer;
       transition: all 0.3s ease;
       font-size: 16px;
       margin-top: 20px;
+      position: relative;
     }
+
     button:hover {
-      background: rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
     }
+
     img {
       width: 300px;
       height: 300px;
       object-fit: cover;
       border-radius: 20px;
-      border: 2px solid #666;
+      border: 1px solid #555;
       margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
-
-  <!-- Slide 1 -->
   <div class="slide active" id="slide1">
     <h1>Welcome</h1>
     <button onclick="nextSlide()">Next</button>
   </div>
 
-  <!-- Slide 2 -->
   <div class="slide" id="slide2">
     <p>
       Hi Cila, I just want to say that every moment with you means a lot to me.<br><br>
       This page is a small piece of my heart — I still care, and I still believe in what we had.<br>
       I just want you to be happy — that’s all that matters to me.
     </p>
-    <button onclick="nextSlid
+    <button onclick="nextSlide()">Next</button>
+  </div>
+
+  <div class="slide" id="slide3">
+    <img src="us-photo.jpg" alt="Us" />
+    <button onclick="nextSlide()">Next</button>
+  </div>
+
+  <div class="slide" id="slide4">
+    <h2>Do you want to try again with me?</h2>
+    <div id="btn-container" style="position:relative; width:100%; height:200px;">
+      <button id="yesBtn" onclick="sayYes()">Yes</button>
+      <button id="noBtn" onclick="moveNo()">No</button>
+    </div>
+  </div>
+
+  <script>
+    let currentSlide = 1;
+    let noClicks = 0;
+
+    function nextSlide() {
+      document.getElementById(`slide${currentSlide}`).classList.remove('active');
+      currentSlide++;
+      document.getElementById(`slide${currentSlide}`).classList.add('active');
+    }
+
+    function sayYes() {
+      document.body.innerHTML = "<h1 style='margin-top:40vh;'>Thank you ❤️</h1>";
+    }
+
+    function moveNo() {
+      noClicks++;
+      const noBtn = document.getElementById('noBtn');
+      const yesBtn = document.getElementById('yesBtn');
+      const container = document.getElementById('btn-container');
+      const cRect = container.getBoundingClientRect();
+      const yRect = yesBtn.getBoundingClientRect();
+
+      if (noClicks < 3) {
+        let newLeft, newTop;
+        do {
+          newLeft = Math.random() * (cRect.width - noBtn.offsetWidth);
+          newTop = Math.random() * (cRect.height - noBtn.offsetHeight);
+        } while (
+          Math.abs(newLeft - yRect.left) < 100 &&
+          Math.abs(newTop - yRect.top) < 50
+        );
+
+        noBtn.style.position = 'absolute';
+        noBtn.style.left = `${newLeft}px`;
+        noBtn.style.top = `${newTop}px`;
+      } else if (noClicks === 3) {
+        yesBtn.style.padding = '30px 60px';
+        yesBtn.style.fontSize = '22px';
+        noBtn.remove();
+      }
+    }
+  </script>
+</body>
+</html>
